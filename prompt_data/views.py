@@ -18,11 +18,13 @@ def prompt_update(request):
         next(reader)  # 첫 번째 줄(헤더) 건너뛰기
 
         for row in reader:
-            Lumiprompt.objects.create(
-                id=int(row[0]),
-                title=row[1],
-                content=row[2],
-            )
+            # 중복된 id를 건너뛰기
+            if not Lumiprompt.objects.filter(id=int(row[0])).exists():
+                Lumiprompt.objects.create(
+                    id=int(row[0]),
+                    title=row[1],
+                    content=row[2],
+                )
 
     return HttpResponse("✅ CSV 데이터가 성공적으로 업데이트되었습니다!")
 
