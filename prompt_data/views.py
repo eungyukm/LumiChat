@@ -1,0 +1,26 @@
+import os
+import csv
+from django.http import HttpResponse
+from django.conf import settings  # ✅ Django 프로젝트 경로 가져오기
+from .models import Lumiprompt
+
+def prompt_update(request):
+    # ✅ 절대 경로를 사용하여 CSV 파일 찾기
+    csv_path = os.path.join(settings.BASE_DIR, "Datas", "prompt_data.csv")
+
+    # ✅ 파일 존재 여부 체크
+    if not os.path.exists(csv_path):
+        return HttpResponse(f"❌ CSV 파일이 없습니다: {csv_path}", status=400)
+
+    with open(csv_path, newline="", encoding="utf-8") as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)  # 첫 번째 줄(헤더) 건너뛰기
+
+        for row in reader:
+            Lumiprompt.objects.create(
+                id=int(row[0]),
+                title=row[1],
+                content=row[2],
+            )
+
+    return HttpResponse("✅ CSV 데이터가 성공적으로 업데이트되었습니다!")
