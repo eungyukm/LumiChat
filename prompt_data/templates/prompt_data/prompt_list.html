@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt List</title>
+</head>
+<body>
+    <h1>Prompt List</h1>
+    <ul>
+        {% for prompt in prompts %}
+            <li>
+                <strong>{{ prompt.title }}</strong>: {{ prompt.content }}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
