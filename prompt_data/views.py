@@ -2,6 +2,7 @@ import os
 import csv
 from django.http import HttpResponse
 from django.conf import settings  # ✅ Django 프로젝트 경로 가져오기
+from django.shortcuts import render
 from .models import Lumiprompt
 
 def prompt_update(request):
@@ -24,3 +25,9 @@ def prompt_update(request):
             )
 
     return HttpResponse("✅ CSV 데이터가 성공적으로 업데이트되었습니다!")
+
+def prompt_list(request):
+    # Lumiprompt 모델의 모든 객체를 가져옵니다.
+    prompts = Lumiprompt.objects.all()
+    # 템플릿에 객체 리스트를 전달하여 렌더링합니다.
+    return render(request, 'prompt_data/prompt_list.html', {'prompts': prompts})
