@@ -16,10 +16,10 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
-from prompt.views import prompt_update
+from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("update/", prompt_update, name="prompt_update"),
+    path('prompt/', include('lumiprompt.urls')),
+    path("prompt_data/", include('prompt_data.urls')),
 ]
