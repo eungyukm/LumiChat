@@ -12,5 +12,4 @@ def post(request):
         'title': title,
         'prompt': prompt,
     } # title and prompt dictionary(context)
-    return render(request, 'lumiprompt/main.html', context) 
-
+    return render(request, 'lumiprompt/main.html', context)

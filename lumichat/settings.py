@@ -78,7 +78,7 @@ WSGI_APPLICATION = "lumichat.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "prompt_lumiprompt",
+        "NAME": BASE_DIR / "prompt_lumiprompt.sqlite3",
     }
 }
 
