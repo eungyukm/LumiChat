@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "lumiprompt",
     "prompt_data",
+    "lumibot",
 ]
 
 MIDDLEWARE = [
