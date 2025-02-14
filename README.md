@@ -15,7 +15,7 @@
 ## 기술 스택
 - **백엔드**: Django, Django Rest Framework (DRF)
 - **AI 모델**: OpenAI API (GPT), LangChain
-- **데이터베이스**: PostgreSQL
+- **데이터베이스**: SQLLite
 - **배포 환경**: 로컬 환경에서 운영 (Docker, AWS 미사용)
 - **프론트엔드**: 간단한 GPT 기반 인터페이스 (1페이지 구성)
 
@@ -47,9 +47,9 @@ python manage.py runserver
 ```
 
 ## API 명세
-- `GET /api/prompts/` → 모든 프롬프트 목록 조회
-- `GET /api/prompts/{prompt_id}/` → 특정 프롬프트 정보 조회
-- `POST /api/chat/` → 챗봇과의 대화 요청 (입력: 질문, 출력: 답변)
+- `GET /api/v1/prompts/` → 모든 프롬프트 목록 조회
+- `GET /api/v1/prompts/{prompt_id}/` → 특정 프롬프트 정보 조회
+- `POST /api/v1/chat/` → 챗봇과의 대화 요청 (입력: 질문, 출력: 답변)
 
 ## 개발 단계
 1. **1단계:** 프롬프트 게시판 형태로 구성된 페이지 1개 제작
