@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <br>
+    <h1 style="text-align: center;"><strong>☾⋆ LumiChat</strong></h1>
+    <br>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bootstrap 카드 목록</title>
@@ -16,94 +19,20 @@
             color: white;
             margin-bottom: 20px;
         }
-        .tag {
-            background-color: #333;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            margin-right: 5px;
-        }
     </style>
 </head>
 <body>
     <div class="container mt-4">
         <div class="row">
-            <div class="col-md-4">
-                <div class="card p-3">
-                    <h5>부동산 전문가</h5>
-                    <small>2025년 2월 13일 오후 12:43</small>
-                    <h6 class="mt-2">부동산 법률 및 중개 기술 향상을 위한 학습 가이드</h6>
-                    <p class="text-muted">You are a Real Estate Expert, focused on enhancing knowledge and skills in real estate law, brokerage techniques, and contract skills.</p>
-                    <div>
-                        <span class="tag">부동산</span>
-                        <span class="tag">법률</span>
-                        <span class="tag">중개기술</span>
-                        <span class="tag">계약기술</span>
-                        <span class="tag">자기개발</span>
+            {% for post in posts %}
+                <div class="col-md-4">
+                    <div class="card p-3">
+                        <h4>{{ post.title }}</h4>
+                        <br>
+                        <p>{{ post.prompt }}</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3">
-                    <h5>부동산 전문가</h5>
-                    <small>2025년 2월 13일 오후 12:41</small>
-                    <h6 class="mt-2">부동산 전문성을 위한 지식 강화</h6>
-                    <p class="text-muted">You are a Real Estate Expert, focused on enhancing knowledge and skills in real estate entrepreneurship, brokerage technology, market analysis, and real estate law.</p>
-                    <div>
-                        <span class="tag">부동산</span>
-                        <span class="tag">자기개발</span>
-                        <span class="tag">전문성</span>
-                        <span class="tag">상권분석</span>
-                        <span class="tag">부동산계약</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3">
-                    <h5>창의적인 광고 카피라이터</h5>
-                    <small>2025년 2월 12일 오전 9:17</small>
-                    <h6 class="mt-2">건강 전문가를 위한 창의적인 광고 작성</h6>
-                    <p class="text-muted">You are a Creative Copywriter specializing in health-related content.</p>
-                    <div>
-                        <span class="tag">건강</span>
-                        <span class="tag">광고</span>
-                        <span class="tag">창의적 글쓰기</span>
-                        <span class="tag">전문가</span>
-                        <span class="tag">콘텐츠 제작</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3">
-                    <h5>창의적 글쓰기 전문가</h5>
-                    <small>2025년 2월 12일 오전 8:29</small>
-                    <h6 class="mt-2">창의적 글쓰기 기술 습득을 위한 가이드</h6>
-                    <p class="text-muted">You are a Creative Writing Expert, dedicated to helping content creators develop their writing skills.</p>
-                    <div>
-                        <span class="tag">글쓰기</span>
-                        <span class="tag">창의성</span>
-                        <span class="tag">작가</span>
-                        <span class="tag">콘텐츠 제작</span>
-                        <span class="tag">기술 습득</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3">
-                    <h5>콘텐츠 스크립트 작성 전문가</h5>
-                    <small>2025년 2월 10일 오후 3:29</small>
-                    <h6 class="mt-2">강력한 메시지와 스토리텔링 기반의 콘텐츠 스크립트 작성</h6>
-                    <p class="text-muted">You are a Content Script Writing Expert, focused on creating scripts based on strong messaging and storytelling.</p>
-                    <div>
-                        <span class="tag">콘텐츠 작성</span>
-                        <span class="tag">IT 정보</span>
-                        <span class="tag">AI</span>
-                        <span class="tag">SEO 최적화</span>
-                        <span class="tag">스토리텔링</span>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
