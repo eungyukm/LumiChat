@@ -58,18 +58,18 @@ def load_vector_db():
 # vector_db = load_vector_db()
 
 # LangChain 검색 체인 설정
-if vector_db:
-    qa_chain = ConversationalRetrievalChain.from_llm(llm, retriever=vector_db.as_retriever(), memory=memory)
-else:
-    qa_chain = None
+# if vector_db:
+#     qa_chain = ConversationalRetrievalChain.from_llm(llm, retriever=vector_db.as_retriever(), memory=memory)
+# else:
+#     qa_chain = None
 
 # 챗봇 응답 함수
-def get_chat_response(question: str):
-    if qa_chain is None:
-        return "⚠️ 데이터베이스가 없습니다. 먼저 나무위키 데이터를 불러오세요."
+# def get_chat_response(question: str):
+#     if qa_chain is None:
+#         return "⚠️ 데이터베이스가 없습니다. 먼저 나무위키 데이터를 불러오세요."
     
-    response = qa_chain.invoke({"question": question})
-    return response["answer"]
+#     response = qa_chain.invoke({"question": question})
+#     return response["answer"]
 
 # 챗봇 응답
 # response = get_chat_response("로스트아크의 버서커 클래스에 전사 클래스 종류 설명해줘")# print(response)
