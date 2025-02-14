@@ -55,7 +55,7 @@ def load_vector_db():
     return vector_db
 
 # 벡터DB 로드
-vector_db = load_vector_db()
+# vector_db = load_vector_db()
 
 # LangChain 검색 체인 설정
 if vector_db:
@@ -72,5 +72,4 @@ def get_chat_response(question: str):
     return response["answer"]
 
 # 챗봇 응답
-response = get_chat_response("로스트아크의 버서커 클래스에 전사 클래스 종류 설명해줘")
-print(response)
+# response = get_chat_response("로스트아크의 버서커 클래스에 전사 클래스 종류 설명해줘")# print(response)
