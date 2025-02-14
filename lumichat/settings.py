@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "lumiprompt",
     "prompt_data",
+    "drf_yasg", # Swagger API 문서용
     "lumibot",
 ]
 

@@ -21,6 +21,7 @@ Deprecated==1.2.18
 distro==1.9.0
 Django==5.1.6
 djangorestframework==3.15.2
+drf-yasg==1.21.8
 durationpy==0.9
 fastapi==0.115.8
 filelock==3.17.0
@@ -40,6 +41,7 @@ humanfriendly==10.0
 idna==3.10
 importlib_metadata==8.5.0
 importlib_resources==6.5.2
+inflection==0.5.1
 jiter==0.8.2
 jsonpatch==1.33
 jsonpointer==3.0.0
@@ -88,6 +90,7 @@ PyPika==0.48.9
 pyproject_hooks==1.2.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
+pytz==2025.1
 PyYAML==6.0.2
 regex==2024.11.6
 requests==2.32.3
@@ -110,6 +113,7 @@ tqdm==4.67.1
 typer==0.15.1
 typing-inspect==0.9.0
 typing_extensions==4.12.2
+uritemplate==4.1.1
 urllib3==2.3.0
 uvicorn==0.34.0
 uvloop==0.21.0
