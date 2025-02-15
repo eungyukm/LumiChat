@@ -37,11 +37,23 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # Third-Party Apps
+    "rest_framework",
+    "drf_yasg",
+
+    # Local Apps
     "lumiprompt",
     "prompt_data",
-    "drf_yasg", # Swagger API 문서용
     "lumibot",
 ]
+
+
+# Add DRF setting
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

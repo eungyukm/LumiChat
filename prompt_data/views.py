@@ -1,9 +1,15 @@
 import os
 import csv
+
+from django.core.serializers import serialize
 from django.http import HttpResponse
 from django.conf import settings  # ✅ Django 프로젝트 경로 가져오기
 from django.shortcuts import render
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
+
 from lumiprompt.models import LumiPrompt
+from lumiprompt.serializers import LumiPromptSerializer  # Ensure PromptSerializer exists in serializers.py
 
 def prompt_update(request):
     # ✅ 절대 경로를 사용하여 CSV 파일 찾기
@@ -28,8 +34,12 @@ def prompt_update(request):
 
     return HttpResponse("✅ CSV 데이터가 성공적으로 업데이트되었습니다!")
 
+
 def prompt_list(request):
     # Lumiprompt 모델의 모든 객체를 가져옵니다.
     prompts = LumiPrompt.objects.all()
     # 템플릿에 객체 리스트를 전달하여 렌더링합니다.
     return render(request, 'prompt_data/prompt_list.html', {'prompts': prompts})
+
+
+

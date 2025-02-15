@@ -28,7 +28,7 @@ schema_view = get_schema_view(
         description="챗봇 API 문서",
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=[permissions.AllowAny],
 )
 
 urlpatterns = [
@@ -36,7 +36,12 @@ urlpatterns = [
     path('prompt/', include('lumiprompt.urls')),
     path("prompt_data/", include('prompt_data.urls')),
 
+    # API
     path("api/v1/chat/", include("lumibot.urls")),
-    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+
+
+    # Swagger
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),# type: ignore
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),# type: ignore
+    path("swagger.json/", schema_view.without_ui(cache_timeout=0)),# type: ignore
 ]
