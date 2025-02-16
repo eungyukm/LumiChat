@@ -20,6 +20,7 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from lumiprompt.views import HomeView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -31,18 +32,35 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
+# urlpatterns = [
+#     path("admin/", admin.site.urls),
+#     # lumiprompt
+#     path('prompt/', include('lumiprompt.urls')),
+#     # prompt_data
+#     path("prompt_data/", include('prompt_data.urls')),
+#     # prompts
+#     path('GET /api/v1/prompts/',include('prompts.urls')),
+#     # lumibot
+#     path("api/v1/chat/", include("lumibot.urls")),
+#     # Swagger
+#     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),# type: ignore
+#     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),# type: ignore
+#     path("swagger.json/", schema_view.without_ui(cache_timeout=0)),# type: ignore
+# ]
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", HomeView.as_view(), name="home"),
+
     # lumiprompt
-    path('prompt/', include('lumiprompt.urls')),
-    # prompt_data
-    path("prompt_data/", include('prompt_data.urls')),
-    # prompts
-    path('GET /api/v1/prompts/',include('prompts.urls')),
-    # lumibot
+    path("api/v1/prompts/", include("lumiprompt.urls")),
+    path("api/v1/prompt_data/", include("prompt_data.urls")),
+
+    # lumibot (챗봇 관련 API)
     path("api/v1/chat/", include("lumibot.urls")),
+
     # Swagger
-    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),# type: ignore
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),# type: ignore
-    path("swagger.json/", schema_view.without_ui(cache_timeout=0)),# type: ignore
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),#type:ignore
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),#type:ignore
+    path("swagger.json/", schema_view.without_ui(cache_timeout=0)),#type:ignore
 ]
