@@ -31,22 +31,23 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=[permissions.AllowAny],
 )
-
-# urlpatterns = [
-#     path("admin/", admin.site.urls),
-#     # lumiprompt
-#     path('prompt/', include('lumiprompt.urls')),
-#     # prompt_data
-#     path("prompt_data/", include('prompt_data.urls')),
-#     # prompts
-#     path('GET /api/v1/prompts/',include('prompts.urls')),
-#     # lumibot
-#     path("api/v1/chat/", include("lumibot.urls")),
-#     # Swagger
-#     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),# type: ignore
-#     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),# type: ignore
-#     path("swagger.json/", schema_view.without_ui(cache_timeout=0)),# type: ignore
-# ]
+"""
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    # lumiprompt
+    path('prompt/', include('lumiprompt.urls')),
+    # prompt_data
+    path("prompt_data/", include('prompt_data.urls')),
+    # prompts
+    path('GET /api/v1/prompts/',include('prompts.urls')),
+    # lumibot
+    path("api/v1/chat/", include("lumibot.urls")),
+    # Swagger
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),# type: ignore
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),# type: ignore
+    path("swagger.json/", schema_view.without_ui(cache_timeout=0)),# type: ignore
+]
+"""
 
 urlpatterns = [
     path("admin/", admin.site.urls),
