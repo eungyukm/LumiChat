@@ -41,12 +41,14 @@ INSTALLED_APPS = [
     # Third-Party Apps
     "rest_framework",
     "drf_yasg",
+    "corsheaders",
 
     # Local Apps
     "lumiprompt",
     "prompt_data",
     "lumibot",
 ]
+
 
 
 # Add DRF setting
@@ -63,7 +65,33 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
+
+
+
+# CORS 설정
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",  # Django 서버 (백엔드)
+    "http://127.0.0.1:8000",
+    "http://localhost:3000",  # 프론트엔드가 React 같은 걸로 돌아갈 경우
+    "http://127.0.0.1:3000",
+]
+
+# 모든 HTTP 메서드 허용 (GET, POST, PUT, DELETE 등)
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "DELETE",
+    "PATCH",
+    "OPTIONS",
+]
+
+# 모든 헤더 허용
+CORS_ALLOW_HEADERS = ["*"]
+
+
 
 ROOT_URLCONF = "lumichat.urls"
 

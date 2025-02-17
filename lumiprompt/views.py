@@ -2,6 +2,7 @@ import random
 
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
+from django.db.models import Q
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework import status
@@ -91,9 +92,12 @@ class SearchPromptAPIView(APIView):
     def get(self, request):
         query = request.GET.get("q", "").strip()
         if not query:
-            return Response({"detail":"검색어를 입력하세요"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "검색어를 입력하세요"}, status=status.HTTP_400_BAD_REQUEST)
 
-        prompts = LumiPrompt.objects.filter(content__icontains=query)
+        prompts = LumiPrompt.objects.filter(
+            Q(title__icontains=query) | Q(prompt__icontains=query)
+        )
+
         serializer = LumiPromptSerializer(prompts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
