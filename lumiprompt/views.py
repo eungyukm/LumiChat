@@ -1,6 +1,5 @@
 import random
 
-
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from drf_yasg.utils import swagger_auto_schema
@@ -9,28 +8,18 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-
 from .models import LumiPrompt
 from .serializers import LumiPromptSerializer
-
 
 
 class HomeView(TemplateView):
     template_name = "lumiprompt/main.html"
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)  # 기존 context 가져오기
+        context = super().get_context_data(**kwargs)  # 기존 context 가져 오기
         context["posts"] = LumiPrompt.objects.all()
-        return context  # 템플릿에서 사용할 context 반환
+        return context
 
-"""
-def post(request):
-    posts = LumiPrompt.objects.all()
-    context = {
-        'posts': posts,
-    }
-    return render(request, 'lumiprompt/main.html',context)
-"""
 
 # API VIEW
 
