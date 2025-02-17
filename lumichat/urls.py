@@ -54,8 +54,11 @@ urlpatterns = [
     path("", HomeView.as_view(), name="home"),
 
     # lumiprompt
-    path("api/v1/prompts/", include("lumiprompt.urls")),
-    path("api/v1/prompt_data/", include("prompt_data.urls")),
+    path("api/v1/lumiprompts/", include("lumiprompt.urls")),
+    
+    # prompts
+    path('api/v1/', include('prompts.urls')),
+
 
     # lumibot (챗봇 관련 API)
     path("api/v1/chat/", include("lumibot.urls")),

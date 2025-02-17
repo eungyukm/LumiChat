@@ -1,8 +1,7 @@
-from django.urls import path
-from .views import PromptsListView
+from rest_framework.routers import DefaultRouter
+from .views import PromptsViewSet
 
-urlpatterns = [
-    path('', PromptsListView.as_view()),             # 목록 조회 & 검색
-    path('<int:pk>/', PromptsListView.as_view()),    # 상세 조회
-    path('random/', PromptsListView.as_view()),      # 랜덤 프롬프트 조회
-]
+router = DefaultRouter()
+router.register(r'prompts', PromptsViewSet)
+
+urlpatterns = router.urls
