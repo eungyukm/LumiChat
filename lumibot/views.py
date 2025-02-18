@@ -1,8 +1,10 @@
+from django.apps import apps
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
 
 class ChatBotView(APIView):
     """
@@ -15,9 +17,21 @@ class ChatBotView(APIView):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                "question": openapi.Schema(type=openapi.TYPE_STRING, description="질문 내용", example="버서커 클래스 특징 알려줘"),
-                "language": openapi.Schema(type=openapi.TYPE_STRING, description="응답 언어 (예: 'ko', 'en')", example="ko"),
-                "mode": openapi.Schema(type=openapi.TYPE_STRING, description="챗봇 응답 모드 (예: 'detailed', 'simple')", example="detailed"),
+                "question": openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description="질문 내용",
+                    example="버서커 클래스 특징 알려줘"
+                ),
+                "language": openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description="응답 언어 (예: 'ko', 'en')",
+                    example="ko"
+                ),
+                "mode": openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description="챗봇 응답 모드 (예: 'detailed', 'simple')",
+                    example="detailed"
+                ),
             },
             required=["question"],  # 필수 파라미터 설정
         ),
@@ -32,20 +46,30 @@ class ChatBotView(APIView):
         ))},
     )
     def post(self, request):
-        """챗봇에게 질문을 보내고 응답을 받음 (파라미터 포함)"""
-        question = request.data.get("question", "")
-        language = request.data.get("language", "ko")  # 기본값: 한국어
-        mode = request.data.get("mode", "simple")  # 기본값: 간단한 답변
+        """챗봇에게 질문을 보내고 응답을 받음 (LangChain 사용)"""
+        question = request.data.get("question", "").strip()
+        language = request.data.get("language", "ko")
+        mode = request.data.get("mode", "simple")
 
         if not question:
             return Response({"error": "질문을 입력해주세요."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # 응답 생성 (현재는 단순 응답, 실제 LangChain 호출 가능)
-        answer = f"[{language.upper()} | {mode.capitalize()}] {question}에 대한 응답입니다."
+        # LumibotConfig에서 LangChain 검색 체인 가져오기
+        app_config = apps.get_app_config("lumibot")
+        qa_chain = getattr(app_config, "qa_chain", None)
+
+        if not qa_chain:
+            return Response(
+                {"error": "⚠️ 데이터베이스가 없습니다. 먼저 데이터를 불러오세요."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        # LangChain을 통해 응답 생성
+        response = qa_chain.invoke({"question": question})
 
         return Response({
             "question": question,
             "language": language,
             "mode": mode,
-            "answer": answer
+            "answer": response["answer"]
         }, status=status.HTTP_200_OK)
