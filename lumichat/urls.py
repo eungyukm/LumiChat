@@ -20,6 +20,7 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from lumiprompt.views import HomeView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -28,15 +29,42 @@ schema_view = get_schema_view(
         description="챗봇 API 문서",
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=[permissions.AllowAny],
 )
+"""
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    # lumiprompt
+    path('prompt/', include('lumiprompt.urls')),
+    # prompt_data
+    path("prompt_data/", include('prompt_data.urls')),
+    # prompts
+    path('GET /api/v1/prompts/',include('prompts.urls')),
+    # lumibot
+    path("api/v1/chat/", include("lumibot.urls")),
+    # Swagger
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),# type: ignore
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),# type: ignore
+    path("swagger.json/", schema_view.without_ui(cache_timeout=0)),# type: ignore
+]
+"""
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('prompt/', include('lumiprompt.urls')),
-    path("prompt_data/", include('prompt_data.urls')),
+    path("", HomeView.as_view(), name="home"),
 
+    # lumiprompt
+    path("api/v1/lumiprompts/", include("lumiprompt.urls")),
+    
+    # prompts
+    path('api/v1/', include('prompts.urls')),
+
+
+    # lumibot (챗봇 관련 API)
     path("api/v1/chat/", include("lumibot.urls")),
-    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
+
+    # Swagger
+    path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),#type:ignore
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),#type:ignore
+    path("swagger.json/", schema_view.without_ui(cache_timeout=0)),#type:ignore
 ]
