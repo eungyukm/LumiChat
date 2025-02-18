@@ -28,7 +28,9 @@ class PromptListAPIView(APIView):
     @swagger_auto_schema(
         operation_summary="프롬프트 목록 조회",
         operation_description="저장된 모든 프롬프트를 조회하는 API 입니다.",
-        responses={200: LumiPromptSerializer(many=True), 401: openapi.Response(description="Invalid token or token expired.")
+        responses={
+            200: LumiPromptSerializer(many=True),
+            401: openapi.Response(description="Invalid token or token expired.")
         }
     )
     def get(self, request):
@@ -65,7 +67,10 @@ class RandomPromptAPIView(APIView):
         queryset = LumiPrompt.objects.all()
 
         if not queryset.exists():
-            return Response({"detail": "No prompts available"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "No prompts available"},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
         prompt = random.choice(list(queryset))
         serializer = LumiPromptSerializer(prompt)
@@ -92,7 +97,10 @@ class SearchPromptAPIView(APIView):
     def get(self, request):
         query = request.GET.get("q", "").strip()
         if not query:
-            return Response({"detail": "검색어를 입력하세요"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "검색어를 입력하세요"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         prompts = LumiPrompt.objects.filter(
             Q(title__icontains=query) | Q(prompt__icontains=query)
