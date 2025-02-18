@@ -20,7 +20,7 @@ class ChatBotView(APIView):
                 "question": openapi.Schema(
                     type=openapi.TYPE_STRING,
                     description="질문 내용",
-                    example="버서커 클래스 특징 알려줘"
+                    example="로스트아크 클래스 알려줘"
                 ),
                 "language": openapi.Schema(
                     type=openapi.TYPE_STRING,
