@@ -6,7 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
-class ChatBotView(APIView):
+class LostArkChatBotView(APIView):
     """
     LangChain 기반 챗봇 API
     사용자가 질문과 추가 정보를 입력하면 응답을 생성하여 반환
