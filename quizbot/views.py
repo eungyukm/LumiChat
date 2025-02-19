@@ -8,8 +8,6 @@ from .serializers import (
 )
 
 
-
-
 # 이름 입력 후 카테고리 목록
 class QuizStartView(APIView):
     @swagger_auto_schema(
@@ -54,6 +52,7 @@ class QuizCategoryView(APIView):
         category = request.data.get("category", "")
         return Response({"message": f"{category}을/를 풀어봅시다 !"}, status=status.HTTP_200_OK)
 
+
 # 랜덤 문제 출제
 class QuizQuestionView(APIView):
     @swagger_auto_schema(
@@ -69,6 +68,7 @@ class QuizQuestionView(APIView):
             "choices":["swagger_view()",  "get_swagger_view()",  "schema_view()", "generate_swagger_url()"]
         }
         return Response(question, status=status.HTTP_200_OK)
+
 
 # 현재 점수 조회
 class QuizScoreView(APIView):
