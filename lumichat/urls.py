@@ -67,4 +67,7 @@ urlpatterns = [
     path("swagger/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),#type:ignore
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),#type:ignore
     path("swagger.json/", schema_view.without_ui(cache_timeout=0)),#type:ignore
+
+    # 퀴즈 챗봇 API
+    path("api/v1/quizbot/", include("quizbot.urls")),
 ]
