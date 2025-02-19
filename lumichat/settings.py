@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "lumiprompt",
     "prompt_data",
     "lumibot",
+    "quizbot",
 ]
 
 
