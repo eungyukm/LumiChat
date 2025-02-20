@@ -50,29 +50,29 @@ class PromptsViewSet(viewsets.ReadOnlyModelViewSet):
         
 
 
-def create_db_view(request):
-    """ 벡터 DB 생성 및 저장을 실행하는 뷰 함수 """
-    db_manager = VectorDBManager()
+# def create_db_view(request):
+#     """ 벡터 DB 생성 및 저장을 실행하는 뷰 함수 """
+#     db_manager = VectorDBManager()
     
-    db_manager.load_documents()
-    db_manager.split_into_chunks()  # ✅ 메서드명 수정 (기존 오류 
-    db_manager.generate_embeddings()
-    db_manager.create_vector_db()
-    db_manager.save_vector_db()
+#     db_manager.load_documents()
+#     db_manager.split_into_chunks()  # ✅ 메서드명 수정 (기존 오류 
+#     db_manager.generate_embeddings()
+#     db_manager.create_vector_db()
+#     db_manager.save_vector_db()
     
-    # 템플릿이 있으면 render(), 없으면 HttpResponse 반환
-    if os.path.exists("templates/db_created.html"):
-        return render(request, 'db_created.html')
-    return HttpResponse("✅ 벡터 DB 생성 완료!")
+#     # 템플릿이 있으면 render(), 없으면 HttpResponse 반환
+#     if os.path.exists("templates/db_created.html"):
+#         return render(request, 'db_created.html')
+#     return HttpResponse("✅ 벡터 DB 생성 완료!")
 
-def load_db_view(request):
-    """ 벡터 DB 로드를 실행하는 뷰 함수 """
-    db_manager = VectorDBManager()
-    db_manager.load_vector_db()
+# def load_db_view(request):
+#     """ 벡터 DB 로드를 실행하는 뷰 함수 """
+#     db_manager = VectorDBManager()
+#     db_manager.load_vector_db()
     
-    # 템플릿이 있으면 render(), 없으면 HttpResponse 반환
-    if os.path.exists("templates/db_loaded.html"):
-        return render(request, 'db_loaded.html')
-    return HttpResponse("✅ 벡터 DB 로드 완료!")
+#     # 템플릿이 있으면 render(), 없으면 HttpResponse 반환
+#     if os.path.exists("templates/db_loaded.html"):
+#         return render(request, 'db_loaded.html')
+#     return HttpResponse("✅ 벡터 DB 로드 완료!")
 
 

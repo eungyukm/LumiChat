@@ -1,9 +1,9 @@
 import os
 from dotenv import load_dotenv
-from langchain.document_loaders import JSONLoader
+from langchain_community.document_loaders import JSONLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
 from langchain.docstore.document import Document
 from tqdm import tqdm
 
@@ -35,7 +35,7 @@ class VectorDBManager:
         if not self.documents:
             print(":warning: JSON 데이터가 비어 있습니다.")
         else:
-            print(f":white_check_mark: JSON 데이터 로드 완료! (예시: {self.documents[:3]})")
+            print(f"✅ JSON 데이터 로드 완료!")
 
     def split_into_chunks(self, chunk_size=300, chunk_overlap=50):
         """ 문서를 작은 청크로 분할하는 메서드 """
@@ -53,7 +53,7 @@ class VectorDBManager:
 
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
         self.split_documents = text_splitter.split_documents(document_objs)
-        print(f":white_check_mark: 문서 분할 완료! (총 {len(self.split_documents)}개)")
+        print(f"✅ 문서 분할 완료! (총 {len(self.split_documents)}개)")
 
     def generate_embeddings(self):
         """ 분할된 문서에 대해 임베딩을 생성하는 메서드 """
@@ -64,7 +64,7 @@ class VectorDBManager:
         embeddings = self.embedding_model.embed_documents(
             [doc.page_content for doc in tqdm(self.split_documents, desc=":arrows_counterclockwise: 임베딩 생성 중...")]
         )
-        print(f":white_check_mark: 임베딩 생성 완료! (총 {len(embeddings)}개)")
+        print(f"✅: 임베딩 생성 완료! (총 {len(embeddings)}개)")
         return embeddings
 
     def create_vector_db(self):
@@ -74,13 +74,13 @@ class VectorDBManager:
             return
 
         self.vector_db = FAISS.from_documents(self.split_documents, self.embedding_model)
-        print(":white_check_mark: 벡터 DB 생성 완료!")
+        print("✅ 벡터 DB 생성 완료!")
 
     def save_vector_db(self):
         """ 생성된 FAISS 벡터 DB를 로컬에 저장하는 메서드 """
         if self.vector_db:
             self.vector_db.save_local(self.db_path)
-            print(f":white_check_mark: 벡터 DB 저장 완료! (경로: {self.db_path})")
+            print(f"✅ 벡터 DB 저장 완료! (경로: {self.db_path})")
         else:
             print(":warning: 저장할 벡터 DB가 없습니다. 먼저 `create_vector_db()`를 실행하세요.")
 
@@ -91,8 +91,8 @@ class VectorDBManager:
             return
 
         try:
-            self.vector_db = FAISS.load_local(self.db_path, self.embedding_model)
-            print(f":white_check_mark: 벡터 DB 로드 완료! (경로: {self.db_path})")
+            self.vector_db = FAISS.load_local(self.db_path, self.embedding_model, allow_dangerous_deserialization=True)
+            print(f"✅ 벡터 DB 로드 완료! (경로: {self.db_path})")
         except Exception as e:
             print(f":warning: 벡터 DB 로드 중 오류 발생: {e}")
 
