@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "lumibot",
     "quizbot",
     'prompts',
+    "travelbot",
 ]
 
 

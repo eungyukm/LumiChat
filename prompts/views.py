@@ -1,19 +1,12 @@
-import os
-from dotenv import load_dotenv
 from rest_framework import viewsets, status
-from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import status
 from django.db.models import Q
-from django.shortcuts import get_object_or_404,render, HttpResponse
-from .utils import VectorDBManager
+from django.shortcuts import get_object_or_404
 from lumiprompt.models import LumiPrompt
 from .serializers import PromptListSerializer, PromptDetailSerializer
 
-
-# api key 불러오기
-load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
 
 class PromptsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = LumiPrompt.objects.all()
@@ -47,32 +40,3 @@ class PromptsViewSet(viewsets.ReadOnlyModelViewSet):
             return Response(serializer.data)
         except AttributeError:
             return Response({"message": "No prompts available"}, status=status.HTTP_404_NOT_FOUND)
-        
-
-
-# def create_db_view(request):
-#     """ 벡터 DB 생성 및 저장을 실행하는 뷰 함수 """
-#     db_manager = VectorDBManager()
-    
-#     db_manager.load_documents()
-#     db_manager.split_into_chunks()  # ✅ 메서드명 수정 (기존 오류 
-#     db_manager.generate_embeddings()
-#     db_manager.create_vector_db()
-#     db_manager.save_vector_db()
-    
-#     # 템플릿이 있으면 render(), 없으면 HttpResponse 반환
-#     if os.path.exists("templates/db_created.html"):
-#         return render(request, 'db_created.html')
-#     return HttpResponse("✅ 벡터 DB 생성 완료!")
-
-# def load_db_view(request):
-#     """ 벡터 DB 로드를 실행하는 뷰 함수 """
-#     db_manager = VectorDBManager()
-#     db_manager.load_vector_db()
-    
-#     # 템플릿이 있으면 render(), 없으면 HttpResponse 반환
-#     if os.path.exists("templates/db_loaded.html"):
-#         return render(request, 'db_loaded.html')
-#     return HttpResponse("✅ 벡터 DB 로드 완료!")
-
-

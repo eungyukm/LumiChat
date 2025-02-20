@@ -1,3 +1,6 @@
+# FAISS 벡터 DB 관련 파일 제외
+vector_db/
+vector_db/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

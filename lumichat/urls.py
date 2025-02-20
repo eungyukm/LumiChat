@@ -58,7 +58,6 @@ urlpatterns = [
     
     # prompts
     path('api/v1/prompts/', include('prompts.urls')),
-    # path('api/v1/vector_db/', include('prompts.urls')),
 
 
     # lumibot (챗봇 관련 API)
@@ -71,4 +70,7 @@ urlpatterns = [
 
     # 퀴즈 챗봇 API
     path("api/v1/quizbot/", include("quizbot.urls")),
+
+    # travel bot
+    path("api/v1/travelbot/", include("travelbot.urls")),
 ]
