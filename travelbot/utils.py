@@ -1,4 +1,5 @@
 import os
+import json
 from dotenv import load_dotenv
 from langchain_community.document_loaders import JSONLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -14,7 +15,7 @@ class VectorDBManager:
         load_dotenv()
         self.api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key:
-            print(":warning: OPENAI_API_KEY 환경 변수가 설정되지 않았습니다. .env 파일에 API 키를 설정해주세요.")
+            print("❌ OPENAI_API_KEY 환경 변수가 설정되지 않았습니다. .env 파일에 API 키를 설정해주세요.")
             exit()
         self.json_path = os.path.join(os.getcwd(), json_path)
         self.db_path = db_path
@@ -26,56 +27,46 @@ class VectorDBManager:
     def load_documents(self):
         """ JSON 파일에서 데이터를 로드하는 메서드 """
         if not os.path.exists(self.json_path):
-            print(f":warning: JSON 파일이 존재하지 않습니다: {self.json_path}")
+            print(f"❌ JSON 파일이 존재하지 않습니다: {self.json_path}")
             return
 
-        loader = JSONLoader(file_path=self.json_path, jq_schema=".records[]", text_content=False)
-        self.documents = loader.load()
+        with open(self.json_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
 
-        if not self.documents:
-            print(":warning: JSON 데이터가 비어 있습니다.")
-        else:
+        if "records" in data:  # 🔹 'records' 키 확인
+            self.documents = data["records"]
             print(f"✅ JSON 데이터 로드 완료! (총 {len(self.documents)}개)")
-            print("🔍 로드된 데이터 샘플:", self.documents[:5])
-
-        # ✅ 데이터가 Document 객체인지 확인
-        if isinstance(self.documents[0], Document):
-            print("✅ 로드된 데이터는 Document 객체입니다.")
         else:
-            print("⚠️ 로드된 데이터는 Document 객체가 아닙니다. JSON 구조를 확인하세요.")
+            print("❌ 'records' 키를 찾을 수 없습니다.")
+            self.documents = []
+
+        # 🔹 데이터 샘플 출력 (앞 5개만)
+        for i, doc in enumerate(self.documents[:5]):
+            print(f"📌 [{i}] 문서: {doc}")
 
 
     def split_into_chunks(self, chunk_size=300, chunk_overlap=50):
         """ 문서를 작은 청크로 분할하는 메서드 (메타데이터 유지) """
         if not self.documents:
-            print(":warning: 로드된 JSON 데이터가 없습니다. `load_documents()`를 먼저 실행하세요.")
+            print("❌ 로드된 JSON 데이터가 없습니다. `load_documents()`를 먼저 실행하세요.")
             return
 
         self.split_documents = []
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
 
         for item in self.documents:
-            # ✅ Document 객체인지 확인 후 처리
-            if isinstance(item, Document):
-                metadata = item.metadata  
-            elif isinstance(item, dict):  
-                metadata = item
-            else:
-                print(f"⚠️ 예상치 못한 데이터 타입: {type(item)}")
-                continue
-
-            processed_metadata = {
-                "id": str(metadata.get("id", "N/A")),
-                "관광지명": metadata.get("관광지명", "N/A"),
-                "설명": metadata.get("설명", "No description"),
-                "위치": metadata.get("소재지도로명주소", metadata.get("소재지지번주소", "정보 없음"))
+            # ✅ JSON에서 필요한 값 추출 (설명을 '관광지소개'에서 가져옴)
+            metadata = {
+                "id": str(item.get("id", "N/A")),
+                "관광지명": item.get("관광지명", "N/A"),
+                "설명": item.get("관광지소개", "No description"),  # 🔹 "관광지소개"로 변경!
+                "위치": item.get("소재지도로명주소", item.get("소재지지번주소", "정보 없음"))
             }
 
-            document = Document(page_content=f"{processed_metadata['관광지명']}, {processed_metadata['설명']}", metadata=processed_metadata)
+            document = Document(page_content=f"{metadata['관광지명']}, {metadata['설명']}", metadata=metadata)
             self.split_documents.extend(text_splitter.split_documents([document]))
 
         print(f"✅ 문서 분할 완료! (총 {len(self.split_documents)}개)")
-
 
     def generate_embeddings(self):
         """ 분할된 문서에 대해 임베딩을 생성하는 메서드 """
@@ -95,7 +86,7 @@ class VectorDBManager:
             print(":warning: 분할된 문서가 없습니다. `split_into_chunks()`를 먼저 실행하세요.")
             return
 
-        for doc in self.split_documents:
+        for doc in self.split_documents[:1]:
             print(f"📌 저장 문서 내용: {doc.page_content}, 메타데이터: {doc.metadata}")
 
         self.vector_db = FAISS.from_documents(self.split_documents, self.embedding_model)
