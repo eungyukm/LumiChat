@@ -40,10 +40,14 @@ class QuizBotView(APIView):
             cache.set(f"quiz_user_{request.session.session_key}", username, timeout=3600)
             return Response({"message": f"{username}님, 퀴즈를 시작합니다!"}, status=status.HTTP_200_OK)
 
+
+
         elif action == "quiz":
             difficulty = request.data.get("difficulty", "medium")
             prompt = f"""
+
                 {difficulty} 난이도의 개발 관련 객관식 퀴즈를 JSON 형식으로 생성하세요.
+
                 {{
                     "question": "문제 내용",
                     "choices": {{"A": "선택지1", "B": "선택지2", "C": "선택지3", "D": "선택지4"}},
@@ -51,6 +55,7 @@ class QuizBotView(APIView):
                     "explanation": "해설"
                 }}
             """
+
             try:
                 client = openai.OpenAI(api_key=api_key)
                 response = client.chat.completions.create(
@@ -58,26 +63,20 @@ class QuizBotView(APIView):
                     messages=[{"role": "system", "content": prompt}],
                     max_tokens=300
                 )
+
                 quiz_json = json.loads(response.choices[0].message.content.strip())
                 quiz_id = str(uuid.uuid4())
-                cache.set(f"quiz_{quiz_id}", quiz_json, timeout=3600)
-                return Response({"message": "퀴즈가 시작됩니다!", "quiz_id": quiz_id, "quiz": quiz_json}, status=status.HTTP_200_OK)
+                cache.set(f"quiz_{quiz_id}", quiz_json, timeout=3600)  # 정답과 해설 포함하여 저장
+
+                quiz_display = quiz_json.copy()
+                quiz_display.pop("answer", None)  # 정답 제거
+                quiz_display.pop("explanation", None)  # 해설 제거
+
+                return Response({"message": "퀴즈가 시작됩니다!", "quiz_id": quiz_id, "quiz": quiz_display},
+                                status=status.HTTP_200_OK
+                                )
+
             except Exception as e:
                 return Response({"error": f"오류 발생: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        elif action == "answer":
-            quiz_id = request.data.get("quiz_id", "").strip()
-            user_answer = request.data.get("answer", "").strip().upper()
-            if not quiz_id or not user_answer:
-                return Response({"error": "퀴즈 ID와 답변을 입력하세요."}, status=status.HTTP_400_BAD_REQUEST)
-            quiz_data = cache.get(f"quiz_{quiz_id}")
-            if not quiz_data:
-                return Response({"error": "퀴즈가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
-            is_correct = user_answer == quiz_data.get("answer")
-            return Response({
-                "message": "정답입니다!" if is_correct else "오답입니다!",
-                "correct_answer": quiz_data.get("answer"),
-                "explanation": quiz_data.get("explanation", "")
-            }, status=status.HTTP_200_OK)
 
-        return Response({"error": "유효하지 않은 action 값입니다."}, status=status.HTTP_400_BAD_REQUEST)
