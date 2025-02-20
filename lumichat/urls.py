@@ -70,5 +70,5 @@ urlpatterns = [
     path("swagger.json/", schema_view.without_ui(cache_timeout=0)),#type:ignore
 
     # 퀴즈 챗봇 API
-    path("api/v1/quizbot/", include("quizbot.urls")),
+    path("api/v1/chat/", include("quizbot.urls")),
 ]
