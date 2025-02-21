@@ -1,3 +1,4 @@
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -42,22 +43,9 @@ class SearchLocationView(APIView):
         
         db_manager = VectorDBManager()
 
-        # 🚀 디버깅 1️⃣: VectorDBManager 내부 속성 확인
-        print("🔍 VectorDBManager 속성:", dir(db_manager))  
-
         db_manager.load_vector_db()
-
-        # 🚀 디버깅 2️⃣: load_vector_db 실행 후 속성 확인
-        print("🔍 VectorDBManager 속성 (로드 후):", dir(db_manager))  
-
-        # 🚀 디버깅 3️⃣: FAISS 인덱스 존재 여부 확인
-        if not hasattr(db_manager, "faiss_index"):
-            return Response({"error": "FAISS 인덱스가 로드되지 않았습니다."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        print("🔍 FAISS 벡터 개수:", db_manager.faiss_index.ntotal)
         
-        results = db_manager.search_similar_locations(query, k=5)  # 가장 유사한 5개 검색
-        print("🔍 검색된 결과 개수:", len(results))
+        results = db_manager.search_similar_locations(query, k=5)
         
         response_data = [
             {"id": idx, "name": doc["name"], "description": doc["description"]}

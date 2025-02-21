@@ -57,7 +57,7 @@ urlpatterns = [
     path("api/v1/lumiprompts/", include("lumiprompt.urls")),
     
     # prompts
-    path('api/v1/prompts/', include('prompts.urls')),
+    path('api/v1/', include('prompts.urls')),
 
 
     # lumibot (챗봇 관련 API)

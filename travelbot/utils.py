@@ -33,33 +33,28 @@ class VectorDBManager:
         with open(self.json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        if "records" in data:  # 🔹 'records' 키 확인
+        if "records" in data:
             self.documents = data["records"]
             print(f"✅ JSON 데이터 로드 완료! (총 {len(self.documents)}개)")
         else:
             print("❌ 'records' 키를 찾을 수 없습니다.")
             self.documents = []
 
-        # 🔹 데이터 샘플 출력 (앞 5개만)
-        for i, doc in enumerate(self.documents[:5]):
-            print(f"📌 [{i}] 문서: {doc}")
-
 
     def split_into_chunks(self, chunk_size=300, chunk_overlap=50):
         """ 문서를 작은 청크로 분할하는 메서드 (메타데이터 유지) """
         if not self.documents:
-            print("❌ 로드된 JSON 데이터가 없습니다. `load_documents()`를 먼저 실행하세요.")
+            print("❌ 로드된 JSON 데이터가 없습니다. load_documents()를 먼저 실행하세요.")
             return
 
         self.split_documents = []
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
 
         for item in self.documents:
-            # ✅ JSON에서 필요한 값 추출 (설명을 '관광지소개'에서 가져옴)
             metadata = {
                 "id": str(item.get("id", "N/A")),
                 "관광지명": item.get("관광지명", "N/A"),
-                "설명": item.get("관광지소개", "No description"),  # 🔹 "관광지소개"로 변경!
+                "설명": item.get("관광지소개", "No description"), 
                 "위치": item.get("소재지도로명주소", item.get("소재지지번주소", "정보 없음"))
             }
 
@@ -71,7 +66,7 @@ class VectorDBManager:
     def generate_embeddings(self):
         """ 분할된 문서에 대해 임베딩을 생성하는 메서드 """
         if not self.split_documents:
-            print(":warning: 분할된 문서가 없습니다. `split_into_chunks()`를 먼저 실행하세요.")
+            print(":warning: 분할된 문서가 없습니다. split_into_chunks()를 먼저 실행하세요.")
             return []
 
         embeddings = self.embedding_model.embed_documents(
@@ -83,14 +78,11 @@ class VectorDBManager:
     def create_vector_db(self):
         """ FAISS 벡터 DB를 생성하는 메서드 (메타데이터 유지) """
         if not self.split_documents:
-            print(":warning: 분할된 문서가 없습니다. `split_into_chunks()`를 먼저 실행하세요.")
+            print(":warning: 분할된 문서가 없습니다. split_into_chunks()를 먼저 실행하세요.")
             return
 
-        for doc in self.split_documents[:1]:
-            print(f"📌 저장 문서 내용: {doc.page_content}, 메타데이터: {doc.metadata}")
-
         self.vector_db = FAISS.from_documents(self.split_documents, self.embedding_model)
-        print("✅ 벡터 DB 생성 완료! (메타데이터 포함)")
+        print("✅ 벡터 DB 생성 완료!")
 
     def save_vector_db(self):
         """ 생성된 FAISS 벡터 DB를 로컬에 저장하는 메서드 """
@@ -98,12 +90,12 @@ class VectorDBManager:
             self.vector_db.save_local(self.db_path)
             print(f"✅ 벡터 DB 저장 완료! (경로: {self.db_path})")
         else:
-            print(":warning: 저장할 벡터 DB가 없습니다. 먼저 `create_vector_db()`를 실행하세요.")
+            print(":warning: 저장할 벡터 DB가 없습니다. 먼저 create_vector_db()를 실행하세요.")
 
     def load_vector_db(self):
         """ 기존 FAISS 벡터 DB를 로드하는 메서드 """
         if not os.path.exists(self.db_path):
-            print(":warning: 로드할 벡터 DB가 없습니다. 먼저 `create_vector_db()`를 실행하세요.")
+            print(":warning: 로드할 벡터 DB가 없습니다. 먼저 create_vector_db()를 실행하세요.")
             return
 
         try:
@@ -115,7 +107,7 @@ class VectorDBManager:
             
     def search_similar_locations(self, query, k=5):
         if not self.vector_db:
-            print("⚠️ 벡터 DB가 로드되지 않았습니다. `load_vector_db()`를 먼저 실행하세요.")
+            print("⚠️ 벡터 DB가 로드되지 않았습니다. load_vector_db()를 먼저 실행하세요.")
             return []
 
         query_vector = self.embedding_model.embed_query(query)
@@ -136,7 +128,7 @@ class VectorDBManager:
     def get_location_by_id(self, id):
         """ 특정 관광지 ID로 상세 정보 조회 """
         if not self.vector_db:
-            print("⚠️ 벡터 DB가 로드되지 않았습니다. `load_vector_db()`를 먼저 실행하세요.")
+            print("⚠️ 벡터 DB가 로드되지 않았습니다. load_vector_db()를 먼저 실행하세요.")
             return None
 
         for doc in self.split_documents:
