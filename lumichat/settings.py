@@ -94,6 +94,8 @@ CORS_ALLOW_METHODS = [
 # 모든 헤더 허용
 CORS_ALLOW_HEADERS = ["*"]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 
 ROOT_URLCONF = "lumichat.urls"
@@ -168,3 +170,10 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # .env 파일 로드
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")

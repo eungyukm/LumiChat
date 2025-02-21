@@ -70,7 +70,9 @@ urlpatterns = [
 
     # 퀴즈 챗봇 API
     path("api/v1/quizbot/", include("quizbot.urls")),
+    path("api/v1/chat/", include("quizbot.urls")),
 
     # travel bot
     path("api/v1/travelbot/", include("travelbot.urls")),
+    
 ]
