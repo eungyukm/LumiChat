@@ -45,7 +45,7 @@ class SearchLocationView(APIView):
 
         db_manager.load_vector_db()
         
-        results = db_manager.search_similar_locations(query, k=5)
+        results = db_manager.search_similar_locations(query, k=1)
         
         response_data = [
             {"id": idx, "name": doc["name"], "description": doc["description"]}
